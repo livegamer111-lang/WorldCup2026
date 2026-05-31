@@ -251,16 +251,15 @@ try {
 }
 
 async function handleGoogleLogin() {
-setAuthError('');
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
 
-try {
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
-} catch (error) {
-  setAuthError(error.message);
-}
-
-
+    console.log("Google login success:", result.user.email);
+  } catch (error) {
+    console.error(error);
+    alert(error.code + " - " + error.message);
+  }
 }
 
 async function handleLogout() {
