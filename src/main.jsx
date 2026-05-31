@@ -167,7 +167,12 @@ const [loadingAuth, setLoadingAuth] = useState(true);
 
 const [paidPlayers, setPaidPlayers] = useState(0);
 const [predictionsSubmitted, setPredictionsSubmitted] = useState(0);
-
+const [leaderboard, setLeaderboard] = useState([]);
+const [adminGroup, setAdminGroup] = useState('A');
+const [adminMatchIndex, setAdminMatchIndex] = useState(0);
+const [adminHomeScore, setAdminHomeScore] = useState('');
+const [adminAwayScore, setAdminAwayScore] = useState('');
+const [adminScorers, setAdminScorers] = useState('');
 const totalPrizePool = paidPlayers * ENTRY_FEE;
 const firstPrize = totalPrizePool * 0.6;
 const secondPrize = totalPrizePool * 0.25;
