@@ -731,7 +731,11 @@ function App() {
   }
 
   const current = predictions[selectedGroup];
-  const welcomeName = userProfile?.username || user?.displayName || user?.email;
+  const welcomeName =
+  userProfile?.username ||
+  username ||
+  user?.displayName ||
+  'Player';
 
   return (
     <main className="app" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -740,7 +744,7 @@ function App() {
 
       <div
         style={{
-          position: 'fixed',
+          position: 'absolute',
           top: 16,
           right: 16,
           zIndex: 999,
