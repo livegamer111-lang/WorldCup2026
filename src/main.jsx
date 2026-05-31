@@ -177,7 +177,25 @@ return Math.round(
 const isFullyComplete = completion === 100;
 const isAdmin = user?.email === ADMIN_EMAIL;
 const hasPaid = Boolean(userProfile?.paid) || isAdmin;
+useEffect(() => {
+  if (!user) return;
 
+  const savedDraft = localStorage.getItem(`predictions-${user.uid}`);
+
+  if (savedDraft) {
+    setPredictions(JSON.parse(savedDraft));
+  }
+}, [user]);
+
+useEffect(() => {
+  if (!user) return;
+
+  localStorage.setItem(
+    `predictions-${user.uid}`,
+    JSON.stringify(predictions)
+  );
+}, [user, predictions]);
+  
 useEffect(() => {
 const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
 setUser(currentUser);
