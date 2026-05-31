@@ -864,9 +864,15 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
           </div>
         </div>
 
-        <button className="primary" onClick={submitPredictions}>
-          Submit Full Tournament Entry
-        </button>
+        <div className="actions">
+  <button onClick={() => setStep(1)}>
+    Back to Groups
+  </button>
+
+  <button className="primary" onClick={submitPredictions}>
+    Submit Full Tournament Entry
+  </button>
+</div>
       </div>
     )}
 
