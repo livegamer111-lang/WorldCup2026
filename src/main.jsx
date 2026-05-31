@@ -208,22 +208,33 @@ const hasPaid = Boolean(userProfile?.paid) || isAdmin;
 useEffect(() => {
   if (!user) return;
 
-  const savedDraft = localStorage.getItem(`predictions-${user.uid}`);
+  async function loadDraft() {
+    const draftRef = doc(db, 'drafts', user.uid);
+    const draftSnap = await getDoc(draftRef);
 
-  if (savedDraft) {
-    setPredictions(JSON.parse(savedDraft));
+    if (draftSnap.exists() && draftSnap.data().predictions) {
+      setPredictions(draftSnap.data().predictions);
+    }
   }
+
+  loadDraft();
 }, [user]);
 
 useEffect(() => {
   if (!user) return;
 
-  localStorage.setItem(
-    `predictions-${user.uid}`,
-    JSON.stringify(predictions)
-  );
-}, [user, predictions]);
-  
+  const saveTimer = setTimeout(async () => {
+    await setDoc(doc(db, 'drafts', user.uid), {
+      uid: user.uid,
+      email: user.email,
+      username: username || userProfile?.username || user.email,
+      predictions,
+      updatedAt: serverTimestamp()
+    });
+  }, 1000);
+
+  return () => clearTimeout(saveTimer);
+}, [user, predictions, username, userProfile]);  
 useEffect(() => {
 const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
 setUser(currentUser);
