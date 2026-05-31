@@ -46,6 +46,7 @@ import './styles.css';
 
 const ENTRY_FEE = 1.99;
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
+const ADMIN_EMAIL = 'manios-13@hotmail.com';
 
 const groups = {
 A: ['Mexico', 'South Africa', 'South Korea', 'Czech Republic'],
@@ -149,7 +150,8 @@ return Math.round(
 }, [predictions]);
 
 const isFullyComplete = completion === 100;
-const hasPaid = Boolean(userProfile?.paid);
+const isAdmin = user?.email === ADMIN_EMAIL;
+const hasPaid = Boolean(userProfile?.paid) || isAdmin;
 
 useEffect(() => {
 const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
@@ -641,10 +643,6 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
               >
                 Pay {money(ENTRY_FEE)} with Card
               </a>
-
-              <button className="auth-google" onClick={markPaidForTesting}>
-                I Paid — Unlock For Testing
-              </button>
 
               <p className="form-intro">
                 Test card: 4242 4242 4242 4242 · any future date · any CVC.
