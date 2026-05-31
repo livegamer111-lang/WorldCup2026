@@ -46,7 +46,7 @@ import './styles.css';
 
 const ENTRY_FEE = 1.99;
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
-const ADMIN_EMAIL = 'manios-13@hotmail.com';
+const ADMIN_EMAIL = '[manios-13@hotmail.com](mailto:manios-13@hotmail.com)';
 
 const groups = {
 A: ['Mexico', 'South Africa', 'South Korea', 'Czech Republic'],
@@ -68,19 +68,42 @@ const totalGroups = groupKeys.length;
 const matchesPerGroup = 6;
 const totalMatches = totalGroups * matchesPerGroup;
 
-function makeMatches(teams) {
+const scheduleByGroup = {
+A: ['11 Jun 2026 · 21:00', '12 Jun 2026 · 00:00', '17 Jun 2026 · 21:00', '18 Jun 2026 · 00:00', '24 Jun 2026 · 21:00', '24 Jun 2026 · 21:00'],
+B: ['12 Jun 2026 · 21:00', '13 Jun 2026 · 00:00', '18 Jun 2026 · 21:00', '19 Jun 2026 · 00:00', '25 Jun 2026 · 21:00', '25 Jun 2026 · 21:00'],
+C: ['13 Jun 2026 · 18:00', '13 Jun 2026 · 21:00', '19 Jun 2026 · 18:00', '19 Jun 2026 · 21:00', '26 Jun 2026 · 21:00', '26 Jun 2026 · 21:00'],
+D: ['14 Jun 2026 · 18:00', '14 Jun 2026 · 21:00', '20 Jun 2026 · 18:00', '20 Jun 2026 · 21:00', '27 Jun 2026 · 21:00', '27 Jun 2026 · 21:00'],
+E: ['15 Jun 2026 · 18:00', '15 Jun 2026 · 21:00', '21 Jun 2026 · 18:00', '21 Jun 2026 · 21:00', '28 Jun 2026 · 21:00', '28 Jun 2026 · 21:00'],
+F: ['16 Jun 2026 · 18:00', '16 Jun 2026 · 21:00', '22 Jun 2026 · 18:00', '22 Jun 2026 · 21:00', '29 Jun 2026 · 21:00', '29 Jun 2026 · 21:00'],
+G: ['17 Jun 2026 · 18:00', '17 Jun 2026 · 21:00', '23 Jun 2026 · 18:00', '23 Jun 2026 · 21:00', '30 Jun 2026 · 21:00', '30 Jun 2026 · 21:00'],
+H: ['18 Jun 2026 · 18:00', '18 Jun 2026 · 21:00', '24 Jun 2026 · 18:00', '24 Jun 2026 · 21:00', '1 Jul 2026 · 21:00', '1 Jul 2026 · 21:00'],
+I: ['19 Jun 2026 · 18:00', '19 Jun 2026 · 21:00', '25 Jun 2026 · 18:00', '25 Jun 2026 · 21:00', '2 Jul 2026 · 21:00', '2 Jul 2026 · 21:00'],
+J: ['20 Jun 2026 · 18:00', '20 Jun 2026 · 21:00', '26 Jun 2026 · 18:00', '26 Jun 2026 · 21:00', '3 Jul 2026 · 21:00', '3 Jul 2026 · 21:00'],
+K: ['21 Jun 2026 · 18:00', '21 Jun 2026 · 21:00', '27 Jun 2026 · 18:00', '27 Jun 2026 · 21:00', '4 Jul 2026 · 21:00', '4 Jul 2026 · 21:00'],
+L: ['22 Jun 2026 · 18:00', '22 Jun 2026 · 21:00', '28 Jun 2026 · 18:00', '28 Jun 2026 · 21:00', '5 Jul 2026 · 21:00', '5 Jul 2026 · 21:00']
+};
+
+function makeMatches(groupKey, teams) {
 const matches = [];
+let count = 0;
 
 for (let i = 0; i < teams.length; i++) {
 for (let j = i + 1; j < teams.length; j++) {
 matches.push({
 home: teams[i],
 away: teams[j],
+dateTime: scheduleByGroup[groupKey][count],
+timezone: 'Amsterdam time',
 homeScore: '',
 awayScore: '',
 scorers: ''
 });
+
+
+  count += 1;
 }
+
+
 }
 
 return matches;
@@ -91,7 +114,7 @@ groupKeys.map((key) => [
 key,
 {
 ranking: groups[key],
-matches: makeMatches(groups[key])
+matches: makeMatches(key, groups[key])
 }
 ])
 );
@@ -131,6 +154,7 @@ const completion = useMemo(() => {
 let completedTables = 0;
 let completedMatches = 0;
 
+
 groupKeys.forEach((group) => {
   const prediction = predictions[group];
 
@@ -147,6 +171,7 @@ return Math.round(
   ((completedTables + completedMatches) / (totalGroups + totalMatches)) * 100
 );
 
+
 }, [predictions]);
 
 const isFullyComplete = completion === 100;
@@ -157,6 +182,7 @@ useEffect(() => {
 const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
 setUser(currentUser);
 setLoadingAuth(false);
+
 
   if (!currentUser) {
     setUserProfile(null);
@@ -227,7 +253,6 @@ try {
 async function handleGoogleLogin() {
 setAuthError('');
 
-
 try {
   const provider = new GoogleAuthProvider();
   await signInWithPopup(auth, provider);
@@ -244,36 +269,6 @@ setStep(0);
 setSubmitted(false);
 }
 
-async function markPaidForTesting() {
-if (!user) {
-setAuthError('You must create an account before payment.');
-return;
-}
-
-
-const userRef = doc(db, 'users', user.uid);
-
-await updateDoc(userRef, {
-  paid: true,
-  paidAt: serverTimestamp(),
-  entryFee: ENTRY_FEE,
-  paymentMethod: 'stripe_payment_link_test',
-  paymentStatus: 'test_paid'
-});
-
-setUserProfile({
-  ...userProfile,
-  paid: true,
-  entryFee: ENTRY_FEE,
-  paymentMethod: 'stripe_payment_link_test',
-  paymentStatus: 'test_paid'
-});
-
-setStep(1);
-
-
-}
-
 function scrollToGame() {
 setStep(0);
 document.getElementById('play-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -282,7 +277,6 @@ document.getElementById('play-section')?.scrollIntoView({ behavior: 'smooth' });
 function moveTeam(group, index, direction) {
 const ranking = [...predictions[group].ranking];
 const target = index + direction;
-
 
 if (target < 0 || target >= ranking.length) return;
 
@@ -316,41 +310,47 @@ setPredictions({
   }
 });
 
-
 }
 
 async function submitPredictions() {
-if (!user) {
-setAuthError('You must create an account first.');
-setStep(0);
-return;
+try {
+setAuthError('');
+
+
+  if (!user) {
+    alert('You must create an account first.');
+    setStep(0);
+    return;
+  }
+
+  if (!hasPaid) {
+    alert('You must pay the entry fee before submitting predictions.');
+    setStep(0);
+    return;
+  }
+
+  if (!isFullyComplete) {
+    alert('You must complete all 12 groups and all 72 games first.');
+    return;
+  }
+
+  await setDoc(doc(db, 'predictions', user.uid), {
+    uid: user.uid,
+    email: user.email,
+    username: username || userProfile?.username || user.email,
+    predictions,
+    completion,
+    points: 0,
+    submittedAt: serverTimestamp()
+  });
+
+  alert('Entry submitted successfully!');
+  setSubmitted(true);
+  setStep(5);
+} catch (error) {
+  console.error('Submit error:', error);
+  alert(`Submit failed: ${error.message}`);
 }
-
-
-if (!hasPaid) {
-  setAuthError('You must pay the entry fee before submitting predictions.');
-  setStep(0);
-  return;
-}
-
-if (!isFullyComplete) {
-  alert('You must complete all 12 groups and all 72 group-stage games before submitting.');
-  return;
-}
-
-await setDoc(doc(db, 'predictions', user.uid), {
-  uid: user.uid,
-  email: user.email,
-  username: username || userProfile?.username || user.email,
-  predictions,
-  completion,
-  points: 0,
-  submittedAt: serverTimestamp()
-});
-
-setSubmitted(true);
-setStep(5);
-
 
 }
 
@@ -645,7 +645,7 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
               </a>
 
               <p className="form-intro">
-                Test card: 4242 4242 4242 4242 · any future date · any CVC.
+                After payment, access will be unlocked automatically when Stripe webhook is connected.
               </p>
 
               <button className="auth-link" onClick={handleLogout}>
@@ -678,10 +678,10 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
                   <span>
                     Payment Status
                     <br />
-                    <small>Full access unlocked</small>
+                    <small>{isAdmin ? 'Admin access unlocked' : 'Full access unlocked'}</small>
                   </span>
                 </div>
-                <b>Paid</b>
+                <b>{isAdmin ? 'Admin' : 'Paid'}</b>
               </div>
 
               <button className="auth-primary" onClick={() => setStep(1)}>
@@ -727,8 +727,18 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
           })}
         </div>
 
-        <button className="primary" onClick={() => setStep(2)}>
-          Continue Full Tournament Entry <ChevronRight size={18} />
+        <button
+          className="primary"
+          onClick={() => {
+            if (completion === 100) {
+              setStep(4);
+            } else {
+              setStep(2);
+            }
+          }}
+        >
+          {completion === 100 ? 'Review & Submit Entry' : 'Continue Full Tournament Entry'}
+          <ChevronRight size={18} />
         </button>
       </div>
     )}
@@ -766,14 +776,14 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
       <div>
         <h2>Group {selectedGroup}: Predict Scores & Scorers</h2>
 
-        <p>Each match can be edited until 24 hours before kickoff.</p>
+        <p>Each match can be edited until 24 hours before kickoff. All times are Amsterdam time.</p>
 
         <div className="matches">
           {current.matches.map((match, index) => (
             <div className="match" key={`${match.home}-${match.away}`}>
               <div className="lockline">
-                <span>Editable now</span>
-                <span>Locks 24h before kickoff</span>
+                <span>{match.dateTime}</span>
+                <span>{match.timezone}</span>
               </div>
 
               <div className="scoreline">
