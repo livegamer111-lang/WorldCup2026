@@ -46,7 +46,7 @@ import './styles.css';
 
 const ENTRY_FEE = 1.99;
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
-const ADMIN_EMAIL = '[manios-13@hotmail.com](mailto:manios-13@hotmail.com)';
+const ADMIN_EMAIL = 'manios-13@hotmail.com';
 
 const groups = {
 A: ['Mexico', 'South Africa', 'South Korea', 'Czech Republic'],
