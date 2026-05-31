@@ -731,10 +731,12 @@ function App() {
   }
 
   const current = predictions[selectedGroup];
-  const welcomeName =
-  userProfile?.username ||
-  username ||
-  user?.displayName ||
+
+const welcomeName =
+  userProfile?.username?.trim() ||
+  username?.trim() ||
+  user?.displayName?.trim() ||
+  user?.email?.split('@')[0] ||
   'Player';
 
   return (
