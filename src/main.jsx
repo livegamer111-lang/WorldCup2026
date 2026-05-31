@@ -747,7 +747,10 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
             return (
               <button
                 key={group}
-                onClick={() => setSelectedGroup(group)}
+                onClick={() => {
+  setSelectedGroup(group);
+  setStep(2);
+}}
                 className={selectedGroup === group ? 'selected' : ''}
               >
                 <b>Group {group}</b>
