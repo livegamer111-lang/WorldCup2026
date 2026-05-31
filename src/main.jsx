@@ -47,6 +47,7 @@ import './styles.css';
 const ENTRY_FEE = 1.99;
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
 const ADMIN_EMAIL = 'manios-13@hotmail.com';
+const GROUP_TABLE_LOCK_TIME = '2026-06-11T20:00:00+02:00';
 
 const groups = {
 A: ['Mexico', 'South Africa', 'South Korea', 'Czech Republic'],
@@ -69,19 +70,21 @@ const matchesPerGroup = 6;
 const totalMatches = totalGroups * matchesPerGroup;
 
 const scheduleByGroup = {
-A: ['11 Jun 2026 · 21:00', '12 Jun 2026 · 00:00', '17 Jun 2026 · 21:00', '18 Jun 2026 · 00:00', '24 Jun 2026 · 21:00', '24 Jun 2026 · 21:00'],
-B: ['12 Jun 2026 · 21:00', '13 Jun 2026 · 00:00', '18 Jun 2026 · 21:00', '19 Jun 2026 · 00:00', '25 Jun 2026 · 21:00', '25 Jun 2026 · 21:00'],
-C: ['13 Jun 2026 · 18:00', '13 Jun 2026 · 21:00', '19 Jun 2026 · 18:00', '19 Jun 2026 · 21:00', '26 Jun 2026 · 21:00', '26 Jun 2026 · 21:00'],
-D: ['14 Jun 2026 · 18:00', '14 Jun 2026 · 21:00', '20 Jun 2026 · 18:00', '20 Jun 2026 · 21:00', '27 Jun 2026 · 21:00', '27 Jun 2026 · 21:00'],
-E: ['15 Jun 2026 · 18:00', '15 Jun 2026 · 21:00', '21 Jun 2026 · 18:00', '21 Jun 2026 · 21:00', '28 Jun 2026 · 21:00', '28 Jun 2026 · 21:00'],
-F: ['16 Jun 2026 · 18:00', '16 Jun 2026 · 21:00', '22 Jun 2026 · 18:00', '22 Jun 2026 · 21:00', '29 Jun 2026 · 21:00', '29 Jun 2026 · 21:00'],
-G: ['17 Jun 2026 · 18:00', '17 Jun 2026 · 21:00', '23 Jun 2026 · 18:00', '23 Jun 2026 · 21:00', '30 Jun 2026 · 21:00', '30 Jun 2026 · 21:00'],
-H: ['18 Jun 2026 · 18:00', '18 Jun 2026 · 21:00', '24 Jun 2026 · 18:00', '24 Jun 2026 · 21:00', '1 Jul 2026 · 21:00', '1 Jul 2026 · 21:00'],
-I: ['19 Jun 2026 · 18:00', '19 Jun 2026 · 21:00', '25 Jun 2026 · 18:00', '25 Jun 2026 · 21:00', '2 Jul 2026 · 21:00', '2 Jul 2026 · 21:00'],
-J: ['20 Jun 2026 · 18:00', '20 Jun 2026 · 21:00', '26 Jun 2026 · 18:00', '26 Jun 2026 · 21:00', '3 Jul 2026 · 21:00', '3 Jul 2026 · 21:00'],
-K: ['21 Jun 2026 · 18:00', '21 Jun 2026 · 21:00', '27 Jun 2026 · 18:00', '27 Jun 2026 · 21:00', '4 Jul 2026 · 21:00', '4 Jul 2026 · 21:00'],
-L: ['22 Jun 2026 · 18:00', '22 Jun 2026 · 21:00', '28 Jun 2026 · 18:00', '28 Jun 2026 · 21:00', '5 Jul 2026 · 21:00', '5 Jul 2026 · 21:00']
+  A: ['2026-06-11T21:00:00+02:00', '2026-06-12T00:00:00+02:00', '2026-06-17T21:00:00+02:00', '2026-06-18T00:00:00+02:00', '2026-06-24T21:00:00+02:00', '2026-06-24T21:00:00+02:00'],
+  B: ['2026-06-12T21:00:00+02:00', '2026-06-13T00:00:00+02:00', '2026-06-18T21:00:00+02:00', '2026-06-19T00:00:00+02:00', '2026-06-25T21:00:00+02:00', '2026-06-25T21:00:00+02:00'],
+  C: ['2026-06-13T18:00:00+02:00', '2026-06-13T21:00:00+02:00', '2026-06-19T18:00:00+02:00', '2026-06-19T21:00:00+02:00', '2026-06-26T21:00:00+02:00', '2026-06-26T21:00:00+02:00'],
+  D: ['2026-06-14T18:00:00+02:00', '2026-06-14T21:00:00+02:00', '2026-06-20T18:00:00+02:00', '2026-06-20T21:00:00+02:00', '2026-06-27T21:00:00+02:00', '2026-06-27T21:00:00+02:00'],
+  E: ['2026-06-15T18:00:00+02:00', '2026-06-15T21:00:00+02:00', '2026-06-21T18:00:00+02:00', '2026-06-21T21:00:00+02:00', '2026-06-28T21:00:00+02:00', '2026-06-28T21:00:00+02:00'],
+  F: ['2026-06-16T18:00:00+02:00', '2026-06-16T21:00:00+02:00', '2026-06-22T18:00:00+02:00', '2026-06-22T21:00:00+02:00', '2026-06-29T21:00:00+02:00', '2026-06-29T21:00:00+02:00'],
+  G: ['2026-06-17T18:00:00+02:00', '2026-06-17T21:00:00+02:00', '2026-06-23T18:00:00+02:00', '2026-06-23T21:00:00+02:00', '2026-06-30T21:00:00+02:00', '2026-06-30T21:00:00+02:00'],
+  H: ['2026-06-18T18:00:00+02:00', '2026-06-18T21:00:00+02:00', '2026-06-24T18:00:00+02:00', '2026-06-24T21:00:00+02:00', '2026-07-01T21:00:00+02:00', '2026-07-01T21:00:00+02:00'],
+  I: ['2026-06-19T18:00:00+02:00', '2026-06-19T21:00:00+02:00', '2026-06-25T18:00:00+02:00', '2026-06-25T21:00:00+02:00', '2026-07-02T21:00:00+02:00', '2026-07-02T21:00:00+02:00'],
+  J: ['2026-06-20T18:00:00+02:00', '2026-06-20T21:00:00+02:00', '2026-06-26T18:00:00+02:00', '2026-06-26T21:00:00+02:00', '2026-07-03T21:00:00+02:00', '2026-07-03T21:00:00+02:00'],
+  K: ['2026-06-21T18:00:00+02:00', '2026-06-21T21:00:00+02:00', '2026-06-27T18:00:00+02:00', '2026-06-27T21:00:00+02:00', '2026-07-04T21:00:00+02:00', '2026-07-04T21:00:00+02:00'],
+  L: ['2026-06-22T18:00:00+02:00', '2026-06-22T21:00:00+02:00', '2026-06-28T18:00:00+02:00', '2026-06-28T21:00:00+02:00', '2026-07-05T21:00:00+02:00', '2026-07-05T21:00:00+02:00']
 };
+
+const kickoffByGroup = scheduleByGroup;
 
 function makeMatches(groupKey, teams) {
 const matches = [];
@@ -90,16 +93,16 @@ let count = 0;
 for (let i = 0; i < teams.length; i++) {
 for (let j = i + 1; j < teams.length; j++) {
 matches.push({
-home: teams[i],
-away: teams[j],
-dateTime: scheduleByGroup[groupKey][count],
-timezone: 'Amsterdam time',
-homeScore: '',
-awayScore: '',
-scorers: ''
+  home: teams[i],
+  away: teams[j],
+  kickoff: kickoffByGroup[groupKey][count],
+  dateTime: scheduleByGroup[groupKey][count],
+  timezone: 'Amsterdam time',
+  homeScore: '',
+  awayScore: '',
+  scorers: ''
 });
-
-
+  
   count += 1;
 }
 
@@ -124,6 +127,16 @@ return `$${value.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })}`;
+}
+function isGroupTableLocked() {
+  return Date.now() >= new Date(GROUP_TABLE_LOCK_TIME).getTime();
+}
+
+function isMatchLocked(match) {
+  const kickoffTime = new Date(match.kickoff).getTime();
+  const lockTime = kickoffTime - 30 * 60 * 1000;
+
+  return Date.now() >= lockTime;
 }
 
 function App() {
@@ -776,8 +789,19 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
               </div>
 
               <div>
-                <button onClick={() => moveTeam(selectedGroup, index, -1)}>↑</button>
-                <button onClick={() => moveTeam(selectedGroup, index, 1)}>↓</button>
+               <button
+  disabled={isGroupTableLocked()}
+  onClick={() => moveTeam(selectedGroup, index, -1)}
+>
+  ↑
+</button>
+
+<button
+  disabled={isGroupTableLocked()}
+  onClick={() => moveTeam(selectedGroup, index, 1)}
+>
+  ↓
+</button>
               </div>
             </div>
           ))}
@@ -798,39 +822,46 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
         <div className="matches">
           {current.matches.map((match, index) => (
             <div className="match" key={`${match.home}-${match.away}`}>
-              <div className="lockline">
-                <span>{match.dateTime}</span>
-                <span>{match.timezone}</span>
-              </div>
+             <div className="lockline">
+  <span>{match.dateTime}</span>
 
+  <span>
+    {isMatchLocked(match)
+      ? '🔒 Locked'
+      : '🔓 Locks 30 min before kickoff'}
+  </span>
+</div>
               <div className="scoreline">
                 <b>{match.home}</b>
 
-                <input
-                  type="number"
-                  min="0"
-                  value={match.homeScore}
-                  onChange={(event) =>
-                    updateMatch(selectedGroup, index, 'homeScore', event.target.value)
-                  }
-                />
+      <input
+  disabled={isMatchLocked(match)}
+  type="number"
+  min="0"
+  value={match.homeScore}
+  onChange={(event) =>
+    updateMatch(selectedGroup, index, 'homeScore', event.target.value)
+  }
+/>
 
-                <span>-</span>
+<span>-</span>
 
-                <input
-                  type="number"
-                  min="0"
-                  value={match.awayScore}
-                  onChange={(event) =>
-                    updateMatch(selectedGroup, index, 'awayScore', event.target.value)
-                  }
-                />
+<input
+  disabled={isMatchLocked(match)}
+  type="number"
+  min="0"
+  value={match.awayScore}
+  onChange={(event) =>
+    updateMatch(selectedGroup, index, 'awayScore', event.target.value)
+  }
+/>
 
                 <b>{match.away}</b>
               </div>
 
               <input
                 value={match.scorers}
+                disabled={isMatchLocked(match)}
                 onChange={(event) =>
                   updateMatch(selectedGroup, index, 'scorers', event.target.value)
                 }
@@ -913,7 +944,7 @@ return ( <main className="app"> <div className="stadium-light left" /> <div clas
             setSubmitted(false);
           }}
         >
-          <RotateCcw size={18} /> Back to Predictions
+          <RotateCcw size={18} /> Edit & Resubmit Predictions
         </button>
       </div>
     )}
