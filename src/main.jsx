@@ -744,16 +744,13 @@ function App() {
 
       <div
         style={{
-          position: 'absolute',
-          top: 16,
-          right: 16,
-          zIndex: 999,
-          display: 'flex',
-          gap: 8,
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          justifyContent: 'flex-end'
-        }}
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  gap: 10,
+  padding: '20px 40px',
+  marginBottom: '20px'
+}}
       >
         {user && (
           <div
