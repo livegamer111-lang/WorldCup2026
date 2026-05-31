@@ -96,7 +96,7 @@ matches.push({
   home: teams[i],
   away: teams[j],
   kickoff: kickoffByGroup[groupKey][count],
-  dateTime: scheduleByGroup[groupKey][count],
+  dateTime: formatAmsterdamTime(kickoffByGroup[groupKey][count]),
   timezone: 'Amsterdam time',
   homeScore: '',
   awayScore: '',
@@ -127,6 +127,16 @@ return `$${value.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })}`;
+}
+function formatAmsterdamTime(dateString) {
+  return new Date(dateString).toLocaleString('en-GB', {
+    timeZone: 'Europe/Amsterdam',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 }
 function isGroupTableLocked() {
   return Date.now() >= new Date(GROUP_TABLE_LOCK_TIME).getTime();
