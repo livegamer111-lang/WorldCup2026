@@ -944,40 +944,50 @@ const unsubscribeLeaderboard = onSnapshot(collection(db, 'users'), (snapshot) =>
     );
   }
 
-  async function saveOfficialResult() {
-    if (!isAdmin) return;
+async function saveOfficialResult() {
+  if (!isAdmin) {
+    alert('Only admin can save official results.');
+    return;
+  }
 
-    if (adminHomeScore === '' || adminAwayScore === '') {
-      alert('Fill in both scores first.');
-      return;
-    }
+  if (adminHomeScore === '' || adminAwayScore === '') {
+    alert('Fill in both scores first.');
+    return;
+  }
 
-    const match = predictions[adminGroup].matches[adminMatchIndex];
-    const id = matchId(adminGroup, adminMatchIndex);
-    const resultData = {
-      id,
-      group: adminGroup,
-      matchIndex: adminMatchIndex,
-      home: match.home,
-      away: match.away,
-      homeScore: Number(adminHomeScore),
-      awayScore: Number(adminAwayScore),
-      scorers: adminScorers,
-      updatedAt: serverTimestamp()
-    };
+  const match = predictions[adminGroup].matches[adminMatchIndex];
+  const id = matchId(adminGroup, adminMatchIndex);
 
-    const updatedResults = {
-      ...officialResults,
-      [id]: resultData
-    };
+  const resultData = {
+    id,
+    group: adminGroup,
+    matchIndex: adminMatchIndex,
+    home: match.home,
+    away: match.away,
+    homeScore: Number(adminHomeScore),
+    awayScore: Number(adminAwayScore),
+    scorers: adminScorers || '',
+    updatedAt: serverTimestamp()
+  };
 
+  const updatedResults = {
+    ...officialResults,
+    [id]: resultData
+  };
+
+  try {
     await setDoc(doc(db, 'results', id), resultData, { merge: true });
+
     await recalculateAllPoints(updatedResults);
 
     alert('Result saved and leaderboard updated.');
+  } catch (error) {
+    console.error('Save result error:', error);
+    alert(`Result save failed: ${error.message}`);
   }
+}
 
-  async function submitPredictions() {
+async function submitPredictions() {
     try {
       setAuthError('');
 
