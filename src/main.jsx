@@ -48,7 +48,7 @@ import './styles.css';
 const ENTRY_FEE = 1.99;
 const PRIZE_POOL_AMOUNT_PER_PLAYER = 1.50;
 const ORGANIZER_AMOUNT_PER_PLAYER = 0.49;
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
+const TIKKIE_PAYMENT_LINK = 'https://tikkie.me/pay/b255q6arntp6avlascrv';
 const ADMIN_EMAIL = 'manios-13@hotmail.com';
 const GROUP_TABLE_LOCK_TIME = '2026-06-11T20:00:00+02:00';
 
@@ -1764,7 +1764,14 @@ async function submitPredictions() {
                     <b>{money(ENTRY_FEE)}</b>
                   </div>
 
-                  <a className="auth-primary" href={STRIPE_PAYMENT_LINK} target="_blank" rel="noopener noreferrer">{t.payWithCard}</a>
+                  <a
+  className="auth-primary"
+  href="https://tikkie.me/pay/b255q6arntp6avlascrv"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Betaal €1,99 via Tikkie
+</a>
                   <button className="auth-link" onClick={handleLogout}>{t.logout}</button>
                 </>
               )}
