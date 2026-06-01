@@ -601,11 +601,15 @@ function calculatePointsForPrediction(predictionData, resultsById) {
       const realHome = Number(result.homeScore);
       const realAway = Number(result.awayScore);
 
-      if (predictedHome === realHome && predictedAway === realAway) {
-        points += 5;
-      } else if (matchOutcome(predictedHome, predictedAway) === matchOutcome(realHome, realAway)) {
-        points += 3;
-      }
+      // Correct winner/draw = 3 points
+if (matchOutcome(predictedHome, predictedAway) === matchOutcome(realHome, realAway)) {
+  points += 3;
+}
+
+// Exact score = +5 points
+if (predictedHome === realHome && predictedAway === realAway) {
+  points += 5;
+}
 
       const predictedScorers = new Set(parseScorers(prediction.scorers));
       const realScorers = new Set(parseScorers(result.scorers));
