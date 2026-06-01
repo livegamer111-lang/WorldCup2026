@@ -1475,28 +1475,109 @@ function App() {
               </article>
 
               <article style={{ gridColumn: '1 / -1' }}>
-                <Goal />
-                <h3>2. Match Predictions</h3>
-                <p>Predict scores and scorers. Every match stays editable until 30 minutes before its own kickoff.</p>
-                <div className="group-picker">
-                  {groupKeys.map((group) => {
-                    const done = predictions[group].matches.filter((match) => match.homeScore !== '' && match.awayScore !== '').length;
-                    return (
-                      <button
-                        key={group}
-                        onClick={() => {
-                          setSelectedGroup(group);
-                          setStep(3);
-                        }}
-                        className={selectedGroup === group ? 'selected' : ''}
-                      >
-                        <b>Group {group}</b>
-                        <span>{done}/6 games</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </article>
+  <Goal />
+  <h3>2. Match Predictions</h3>
+  <p>
+    Select a group and predict the six matches. Matches stay open until
+    30 minutes before kickoff.
+  </p>
+
+  <div className="group-picker">
+    {groupKeys.map((group) => {
+      const done = predictions[group].matches.filter(
+        (match) => match.homeScore !== '' && match.awayScore !== ''
+      ).length;
+
+      return (
+        <button
+          key={group}
+          onClick={() => setSelectedGroup(group)}
+          className={selectedGroup === group ? 'selected' : ''}
+        >
+          <b>Group {group}</b>
+          <span>{done}/6 games</span>
+        </button>
+      );
+    })}
+  </div>
+
+  <div className="matches" style={{ marginTop: 24 }}>
+    {predictions[selectedGroup].matches.map((match, index) => (
+      <div className="match" key={`${match.home}-${match.away}`}>
+        <div className="lockline">
+          <span>{match.dateTime}</span>
+          <span>
+            {isMatchLocked(match) ? `🔒 ${t.locked}` : `🔓 ${t.locks30}`}
+          </span>
+        </div>
+
+        <div className="scoreline">
+          <b>{match.home}</b>
+
+          <input
+            disabled={isMatchLocked(match)}
+            type="number"
+            min="0"
+            value={match.homeScore}
+            onChange={(event) =>
+              updateMatch(selectedGroup, index, 'homeScore', event.target.value)
+            }
+          />
+
+          <span>-</span>
+
+          <input
+            disabled={isMatchLocked(match)}
+            type="number"
+            min="0"
+            value={match.awayScore}
+            onChange={(event) =>
+              updateMatch(selectedGroup, index, 'awayScore', event.target.value)
+            }
+          />
+
+          <b>{match.away}</b>
+        </div>
+
+        <input
+          value={match.scorers}
+          disabled={isMatchLocked(match)}
+          onChange={(event) =>
+            updateMatch(selectedGroup, index, 'scorers', event.target.value)
+          }
+          placeholder={t.goalScorers}
+        />
+      </div>
+    ))}
+  </div>
+
+  <div className="actions" style={{ marginTop: 20 }}>
+    <button
+      onClick={() => {
+        setSelectedGroup(previousGroup);
+      }}
+      disabled={currentGroupIndex === 0}
+    >
+      ← Previous Group
+    </button>
+
+    <button
+      className="primary"
+      onClick={() => saveDraftNow(`Group ${selectedGroup} matches saved`)}
+    >
+      Submit Matches
+    </button>
+
+    <button
+      onClick={() => {
+        setSelectedGroup(nextGroup);
+      }}
+      disabled={currentGroupIndex === groupKeys.length - 1}
+    >
+      Next Group →
+    </button>
+  </div>
+</article>
             </section>
 
             <div className="actions">
