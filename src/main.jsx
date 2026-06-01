@@ -1106,7 +1106,7 @@ async function submitPredictions() {
                   <div>
                     <span>{index + 1}</span>
                     <b>{player.username || player.email?.split('@')[0] || 'Player'}</b>
-                    <small>{player.email}</small>
+                
                   </div>
                   <b>{Number(player.points || 0)} pts</b>
                 </div>
