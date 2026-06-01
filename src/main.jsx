@@ -934,6 +934,11 @@ const unsubscribeLeaderboard = onSnapshot(collection(db, 'users'), (snapshot) =>
         const data = predictionDoc.data();
         const points = calculatePointsForPrediction(data.predictions, resultsOverride);
 
+console.log('PLAYER:', data.email);
+console.log('RESULTS:', resultsOverride);
+console.log('PREDICTIONS:', data.predictions);
+console.log('CALCULATED POINTS:', points);
+
         await setDoc(
           doc(db, 'predictions', predictionDoc.id),
           {
