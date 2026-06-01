@@ -792,11 +792,18 @@ function App() {
     });
 
     const unsubscribePredictions = onSnapshot(collection(db, 'predictions'), (snapshot) => {
-      setPredictionsSubmitted(snapshot.size);
-      const rows = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
-      rows.sort((a, b) => Number(b.points || 0) - Number(a.points || 0));
-      setLeaderboard(rows);
-    });
+  setPredictionsSubmitted(snapshot.size);
+});
+
+const unsubscribeLeaderboard = onSnapshot(collection(db, 'users'), (snapshot) => {
+  const rows = snapshot.docs
+    .map((item) => ({ id: item.id, ...item.data() }))
+    .filter((player) => player.paid === true || Number(player.points || 0) > 0);
+
+  rows.sort((a, b) => Number(b.points || 0) - Number(a.points || 0));
+
+  setLeaderboard(rows);
+});
 
     const unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
       const results = {};
