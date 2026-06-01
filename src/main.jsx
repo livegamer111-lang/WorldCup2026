@@ -46,6 +46,8 @@ where
 import './styles.css';
 
 const ENTRY_FEE = 1.99;
+const PRIZE_POOL_AMOUNT_PER_PLAYER = 1.50;
+const ORGANIZER_AMOUNT_PER_PLAYER = 0.49;
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_8x24gAaY90Ca5cT1Sfc7u00';
 const ADMIN_EMAIL = 'manios-13@hotmail.com';
 const GROUP_TABLE_LOCK_TIME = '2026-06-11T20:00:00+02:00';
@@ -829,7 +831,8 @@ function App() {
   const [adminAwayScore, setAdminAwayScore] = useState('');
   const [adminScorers, setAdminScorers] = useState('');
 
-  const totalPrizePool = paidPlayers * ENTRY_FEE;
+  const totalPrizePool = paidPlayers * PRIZE_POOL_AMOUNT_PER_PLAYER;
+const organizerTotal = paidPlayers * ORGANIZER_AMOUNT_PER_PLAYER;
   const firstPrize = totalPrizePool * 0.6;
   const secondPrize = totalPrizePool * 0.25;
   const thirdPrize = totalPrizePool * 0.15;
