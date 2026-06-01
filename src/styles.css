@@ -705,3 +705,132 @@ border-radius: 24px;
 grid-template-columns: 1fr;
 }
 }
+@media (max-width: 768px) {
+  .app {
+    padding: 0 14px;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 28px 18px;
+    border-radius: 28px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.4rem, 12vw, 4.2rem);
+    line-height: 0.95;
+  }
+
+  .hero-copy p {
+    font-size: 1rem;
+  }
+
+  .prize-card {
+    margin-top: 20px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .rules {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .game-card {
+    padding: 22px 14px;
+    border-radius: 26px;
+  }
+
+  .auth-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .group-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .ranking-row > div:last-child {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .matches {
+    gap: 16px;
+  }
+
+  .match {
+    padding: 16px;
+  }
+
+  .scoreline {
+    display: grid;
+    grid-template-columns: 1fr 70px 20px 70px 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .scoreline b {
+    min-width: 0;
+    font-size: 0.95rem;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .scoreline input {
+    width: 70px;
+    min-width: 70px;
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .lockline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions button,
+  .actions .primary {
+    width: 100%;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .winner-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .scoreline {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .scoreline input {
+    width: 100%;
+  }
+
+  .top-language-bar {
+    justify-content: center !important;
+    padding: 14px !important;
+  }
+}
