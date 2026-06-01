@@ -39,7 +39,8 @@ import {
   serverTimestamp,
   setDoc,
   getDocs,
-  where
+deleteDoc,
+where
 } from 'firebase/firestore';
 
 import './styles.css';
@@ -915,9 +916,18 @@ const unsubscribeLeaderboard = onSnapshot(collection(db, 'users'), (snapshot) =>
   }
 
   async function recalculateAllPoints(resultsOverride = officialResults) {
-    if (!isAdmin) return;
+  if (!isAdmin) {
+    alert('Only admin can recalculate points.');
+    return;
+  }
 
+  try {
     const predictionsSnapshot = await getDocs(collection(db, 'predictions'));
+
+    if (predictionsSnapshot.empty) {
+      alert('No submitted predictions found.');
+      return;
+    }
 
     await Promise.all(
       predictionsSnapshot.docs.map(async (predictionDoc) => {
@@ -942,8 +952,13 @@ const unsubscribeLeaderboard = onSnapshot(collection(db, 'users'), (snapshot) =>
         );
       })
     );
-  }
 
+    alert(`Points recalculated for ${predictionsSnapshot.size} players.`);
+  } catch (error) {
+    console.error('Recalculate error:', error);
+    alert(`Recalculate failed: ${error.message}`);
+  }
+}
 async function saveOfficialResult() {
   if (!isAdmin) {
     alert('Only admin can save official results.');
@@ -977,6 +992,7 @@ async function saveOfficialResult() {
 
   try {
     await setDoc(doc(db, 'results', id), resultData, { merge: true });
+    setOfficialResults(updatedResults);
 
     await recalculateAllPoints(updatedResults);
 
@@ -984,6 +1000,33 @@ async function saveOfficialResult() {
   } catch (error) {
     console.error('Save result error:', error);
     alert(`Result save failed: ${error.message}`);
+  }
+}
+  async function deleteOfficialResult() {
+  if (!isAdmin) {
+    alert('Only admin can delete official results.');
+    return;
+  }
+
+  const id = matchId(adminGroup, adminMatchIndex);
+
+  try {
+    await deleteDoc(doc(db, 'results', id));
+
+    const updatedResults = { ...officialResults };
+    delete updatedResults[id];
+
+    setOfficialResults(updatedResults);
+    setAdminHomeScore('');
+    setAdminAwayScore('');
+    setAdminScorers('');
+
+    await recalculateAllPoints(updatedResults);
+
+    alert('Result deleted and leaderboard updated.');
+  } catch (error) {
+    console.error('Delete result error:', error);
+    alert(`Delete failed: ${error.message}`);
   }
 }
 
@@ -1166,8 +1209,17 @@ async function submitPredictions() {
           </div>
 
           <div className="actions">
-            <button className="primary" onClick={saveOfficialResult}>Save Result & Update Leaderboard</button>
-            <button onClick={() => recalculateAllPoints()}>Recalculate All Points</button>
+          <button className="primary" onClick={saveOfficialResult}>
+  Save Result & Update Leaderboard
+</button>
+
+<button onClick={() => recalculateAllPoints()}>
+  Recalculate All Points
+</button>
+
+<button onClick={deleteOfficialResult}>
+  Delete Result
+</button>  
           </div>
         </article>
       </section>
